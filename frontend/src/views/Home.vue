@@ -1,29 +1,9 @@
 <template>
 <div class="home">
-  <b-row>
-    <b-col lg="6" offset-lg="3">
-      <b>Exp&eacute;rience</b>: <span>{{ n }}</span>&nbsp;an{{ (n>0)?"s":"" }}
-      <b-form-input type="range" min="0" max="40" step="1" v-model="n"/>
-    </b-col>
-  </b-row>
-  <b-row>
-    <b-col lg="6" offset-lg="3">
-      <b>Formation</b>: <span>{{ education() }}</span>
-      <b-form-input type="range" min="0.8" max="1.1" step="0.01" v-model="f"/>
-    </b-col>
-  </b-row>
-  <b-row>
-    <b-col lg="6" offset-lg="3">
-      <b>Entreprise</b>: <span>{{ entreprise() }}</span>
-      <b-form-input type="range" min="0.8" max="1.1" step="0.01" v-model="e"/>
-    </b-col>
-  </b-row>
-  <b-row>
-    <b-col lg="6" offset-lg="3">
-      <b>Tension</b>: <span>{{ tension() }}</span>
-      <b-form-input type="range" min="0.9" max="1.1" step="0.01" v-model="t"/>
-    </b-col>
-  </b-row>
+  <Scaller v-model="n" max="40" title="Expérience" :details="xpdetails"/>
+  <Scaller v-model="e" min="0.8" max="1.1" step="0.01" title="Formation" :details="education"/>
+  <Scaller v-model="c" min="0.8" max="1.1" step="0.01" title="Entreprise" :details="compagny"/>
+  <Scaller v-model="t" min="0.9" max="1.1" step="0.01" title="Tension" :details="tension"/>
   <b-row>
     <b-col lg="6" offset-lg="3">
       <b>Extra</b>
@@ -34,15 +14,11 @@
       <b-form-checkbox v-model="e5">Compet&eacute;nce bonus</b-form-checkbox>
     </b-col>
   </b-row>
-  <b-row>
-    <b-col lg="6" offset-lg="3">
-      <b>Localisation</b>: <span>{{ localisation() }}</span>
-      <b-form-input type="range" min="0.6" max="1" step="0.01" v-model="r"/>
-    </b-col>
-  </b-row>
-  <b-row>
+  <Scaller v-model="r" min="0.6" max="1" step="0.01" title="Localisation" :details="localisation"/>
+  <b-row class="mt-3">
     <b-col lg="6" offset-lg="3">
       <h2>{{ compute() }} K&euro; brut/an</h2>
+      Donne ton estimation en compiant ce <a :href="gurl()">lien</a>
     </b-col>
   </b-row>
 </div>
@@ -50,13 +26,29 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator'
+import Scaller from '@/components/Scaller.vue'
+
+interface Parameters {
+  [key: string]: number;
+}
+
+function serialize (obj: Parameters) {
+  const str = []
+  for (const p in obj) {
+    str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
+  }
+  return str.join('&')
+}
 
 const HomeModule = Vue.extend({
+  components: {
+    Scaller
+  },
   data () {
     return {
       n: 0,
-      f: 1,
       e: 1,
+      c: 1,
       t: 1,
       r: 1,
       e1: false,
@@ -66,24 +58,30 @@ const HomeModule = Vue.extend({
       e5: false
     }
   },
+  created () {
+    this.load()
+  },
   methods: {
-    education () {
-      if (this.f < 0.9) {
+    xpdetails (value: number) {
+      return value + ' an' + ((value > 0) ? 's' : '')
+    },
+    education (value: number) {
+      if (value < 0.9) {
         return 'Autodidactes'
-      } else if (this.f < 1) {
+      } else if (value < 1) {
         return 'Bootcamps (bac+3)'
-      } else if (this.f < 1.1) {
+      } else if (value < 1.1) {
         return 'Ecole d\'informatique, autres école d\'ingénieurs (bac+5)'
       } else {
         return 'Ecoles d\'ingénieurs de groupe A+ et A (bac+5)'
       }
     },
-    entreprise () {
-      if (this.e < 0.9) {
+    compagny (value: number) {
+      if (value < 0.9) {
         return 'ESN et Agences'
-      } else if (this.e < 1) {
+      } else if (value < 1) {
         return 'Jeu vidéo, Start-ups pré-seed'
-      } else if (this.e < 1.1) {
+      } else if (value < 1.1) {
         return 'Start-ups'
       } else {
         return 'Grands groupes, Finance, Adtech'
@@ -105,10 +103,23 @@ const HomeModule = Vue.extend({
         return 'Paris'
       }
     },
+    gurl () {
+      return '?' + serialize(this.$data)
+    },
+    load () {
+      for (const p in this.$route.query) {
+        const rval = this.$route.query[p]
+        if (rval === 'true' || rval === 'false') {
+          this.$data[p] = rval === 'true'
+        } else {
+          this.$data[p] = +rval
+        }
+      }
+    },
     compute () {
       const extras = (+this.e1) + (+this.e2) + (+this.e3) + (+this.e4) + (+this.e5)
       const val = (
-        (37 + 4 * Math.pow(this.n, 3 / 4)) * this.f * this.e * this.t + 4 * Math.sqrt(extras)
+        (37 + 4 * Math.pow(this.n, 3 / 4)) * this.e * this.c * this.t + 4 * Math.sqrt(extras)
       ) * this.r
       return Math.ceil(val)
     }
