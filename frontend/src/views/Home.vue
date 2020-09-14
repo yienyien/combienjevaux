@@ -1,9 +1,9 @@
 <template>
 <div class="home">
   <Scaller v-model="n" max="40" title="Expérience" :details="xpdetails"/>
-  <Scaller v-model="e" min="0.8" max="1.1" step="0.01" title="Formation" :details="education"/>
-  <Scaller v-model="c" min="0.8" max="1.1" step="0.01" title="Entreprise" :details="compagny"/>
-  <Scaller v-model="t" min="0.9" max="1.1" step="0.01" title="Tension" :details="tension"/>
+  <Scaller v-model="e" min="0.8" max="1.1" step="0.1" title="Formation" :details="education"/>
+  <Scaller v-model="c" min="0.8" max="1.1" step="0.1" title="Entreprise" :details="compagny"/>
+  <Scaller v-model="t" min="0.9" max="1.1" step="0.1" title="Tension" :details="tension"/>
   <b-row>
     <b-col>
       <b>Extra</b>
@@ -14,11 +14,11 @@
       <b-form-checkbox v-model="e5">Compet&eacute;nce bonus</b-form-checkbox>
     </b-col>
   </b-row>
-  <Scaller v-model="r" min="0.6" max="1" step="0.01" title="Localisation" :details="localisation"/>
+  <Scaller v-model="r" min="0.8" max="1" step="0.2" title="Localisation" :details="localisation" class="mt-2"/>
   <b-row class="mt-3">
     <b-col>
       <h2>{{ compute() }} K&euro; brut/an</h2>
-      Donne ton estimation en compiant ce <a :href="gurl()">lien</a>
+      Partage ton estimation en copiant ce <a :href="gurl()">lien</a>
     </b-col>
   </b-row>
 </div>
@@ -98,7 +98,7 @@ const HomeModule = Vue.extend({
     },
     localisation () {
       if (this.r < 1) {
-        return 'province'
+        return 'Province'
       } else {
         return 'Paris'
       }
