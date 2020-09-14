@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col lg="6" offset-lg="3">
+    <b-col>
       <b>{{title}}</b>: {{ details(val) }}
       <b-form-input type="range" :min="min" :max="max" :step="step" v-model="val" @input="update()"/>
     </b-col>

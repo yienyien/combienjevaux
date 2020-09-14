@@ -1,7 +1,7 @@
 <template>
 <div class="about">
   <b-row>
-    <b-col lg=3>
+    <b-col lg=4>
       <b>Article original Hiresweet:</b>
     </b-col>
     <b-col>
@@ -9,15 +9,15 @@
     </b-col>
   </b-row>
   <b-row>
-    <b-col lg=3>
-      <b>Moi:</b>
+    <b-col lg=4>
+      <b>Qui suis-je ?</b>
     </b-col>
     <b-col>
       Aur&eacute;lien Moreau
     </b-col>
   </b-row>
   <b-row>
-    <b-col lg=3>
+    <b-col lg=4>
       <b>Me contacter</b>
     </b-col>
     <b-col>

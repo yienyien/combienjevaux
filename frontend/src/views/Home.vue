@@ -5,7 +5,7 @@
   <Scaller v-model="c" min="0.8" max="1.1" step="0.01" title="Entreprise" :details="compagny"/>
   <Scaller v-model="t" min="0.9" max="1.1" step="0.01" title="Tension" :details="tension"/>
   <b-row>
-    <b-col lg="6" offset-lg="3">
+    <b-col>
       <b>Extra</b>
       <b-form-checkbox v-model="e1">Activit&eacute; opensource importante</b-form-checkbox>
       <b-form-checkbox v-model="e2">&Eacute;xperience passee dans des entreprises prestigieuses</b-form-checkbox>
@@ -16,7 +16,7 @@
   </b-row>
   <Scaller v-model="r" min="0.6" max="1" step="0.01" title="Localisation" :details="localisation"/>
   <b-row class="mt-3">
-    <b-col lg="6" offset-lg="3">
+    <b-col>
       <h2>{{ compute() }} K&euro; brut/an</h2>
       Donne ton estimation en compiant ce <a :href="gurl()">lien</a>
     </b-col>
