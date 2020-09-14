@@ -29,7 +29,7 @@ const Scaller = Vue.extend({
     }
   },
   watch: {
-    value (newVal, oldVal) {
+    value (newVal) {
       this.val = newVal
     }
   }
